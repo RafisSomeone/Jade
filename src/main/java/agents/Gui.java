@@ -23,8 +23,6 @@
 
 package agents;
 
-import jade.core.AID;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -32,38 +30,33 @@ import javax.swing.*;
 /**
  @author Giovanni Caire - TILAB
  */
-class BookSellerGui extends JFrame {
-    private BookSellerAgent myAgent;
+class Gui extends JFrame {
+    private MasterAgent myAgent;
 
-    private JTextField titleField, priceField;
+    private JTextField jobField;
 
-    BookSellerGui(BookSellerAgent a) {
+    Gui(MasterAgent a) {
         super(a.getLocalName());
 
         myAgent = a;
 
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(2, 2));
-        p.add(new JLabel("Book title:"));
-        titleField = new JTextField(15);
-        p.add(titleField);
-        p.add(new JLabel("Price:"));
-        priceField = new JTextField(15);
-        p.add(priceField);
+        p.add(new JLabel("Job:"));
+        jobField = new JTextField(15);
+        p.add(jobField);
         getContentPane().add(p, BorderLayout.CENTER);
 
         JButton addButton = new JButton("Add");
         addButton.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 try {
-                    String title = titleField.getText().trim();
-                    String price = priceField.getText().trim();
-                    myAgent.updateCatalogue(title, Integer.parseInt(price));
-                    titleField.setText("");
-                    priceField.setText("");
+                    String job = jobField.getText().trim();
+                    myAgent.updateCatalogue(job);
+                    jobField.setText("");
                 }
                 catch (Exception e) {
-                    JOptionPane.showMessageDialog(BookSellerGui.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(Gui.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         } );
@@ -89,5 +82,10 @@ class BookSellerGui extends JFrame {
         int centerY = (int)screenSize.getHeight() / 2;
         setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
         super.setVisible(true);
+    }
+
+    public void showMessage(String message){
+        JOptionPane.showMessageDialog(Gui.this, message, "Info", JOptionPane.INFORMATION_MESSAGE);
+
     }
 }

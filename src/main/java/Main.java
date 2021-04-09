@@ -7,7 +7,7 @@ public class Main {
                 "-gui",
                 "-local-host 127.0.0.1",
                 "-container",
-                "Agent1:agents.PingAgent"   // <- Your custom agents
+                "Agent1:agents.MasterAgent"   // <- Your custom agents
         };
         Boot.main(container);
         String[] newContainer = {
