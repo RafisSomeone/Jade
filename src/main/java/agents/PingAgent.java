@@ -59,7 +59,7 @@ public class PingAgent extends Agent{
 
                 if(msg.getPerformative()== ACLMessage.REQUEST){
                     String content = msg.getContent();
-                    if ((content != null) && (content.indexOf("ping") != -1)){
+                    if ((content != null) && (content.contains("ping"))){
                         myLogger.log(Logger.INFO, "Agent "+getLocalName()+" - Received PING Request from "+msg.getSender().getLocalName());
                         reply.setPerformative(ACLMessage.INFORM);
                         reply.setContent("pung");
