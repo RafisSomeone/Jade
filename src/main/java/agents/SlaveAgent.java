@@ -44,29 +44,11 @@ public class SlaveAgent extends Agent {
         Object[] args = getArguments();
         if (args != null && args.length > 1) {
             jobName = (String) args[0];
-            receiver = new AID((String)args[1], AID.ISLOCALNAME);
+            receiver = new AID((String)args[1], AID.ISGUID);
             System.out.println("Target job is "+jobName);
             addBehaviour(new OneShotBehaviour(this) {
                 @Override
                 public void action() {
-//                    System.out.println("Trying to perform "+jobName);
-//                    DFAgentDescription template = new DFAgentDescription();
-//                    ServiceDescription sd = new ServiceDescription();
-//                    sd.setType("job");
-//                    template.addServices(sd);
-//                    try {
-//                        DFAgentDescription[] result = DFService.search(myAgent, template);
-//                        System.out.println("Found the following master agents:");
-//                        masterAgents = new AID[result.length];
-//                        for (int i = 0; i < result.length; ++i) {
-//                            masterAgents[i] = result[i].getName();
-//                            System.out.println(masterAgents[i].getName());
-//                        }
-//                    }
-//                    catch (FIPAException fe) {
-//                        fe.printStackTrace();
-//                    }
-
                     myAgent.addBehaviour(new RequestPerformer());
                 }
             } );
