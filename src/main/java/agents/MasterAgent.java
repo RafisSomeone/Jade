@@ -38,21 +38,15 @@ import jade.wrapper.StaleProxyException;
 import java.util.*;
 
 public class MasterAgent extends Agent {
-    // The catalogue of books for sale (maps the title of a book to its price)
     private LinkedHashSet<String> catalogue;
-    // The GUI by means of which the user can add books in the catalogue
     private Gui myGui;
 
-    // Put agent initializations here
     protected void setup() {
-        // Create the catalogue
         catalogue = new LinkedHashSet<>();
 
-        // Create and show the GUI
         myGui = new Gui(this);
         myGui.showGui();
 
-        // Register the book-selling service in the yellow pages
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
@@ -66,36 +60,29 @@ public class MasterAgent extends Agent {
             fe.printStackTrace();
         }
 
-        // Add the behaviour serving queries from buyer agents
-        addBehaviour(new OfferRequestsServer());
-
+        addBehaviour(new GetResult());
     }
 
-    // Put agent clean-up operations here
     protected void takeDown() {
-        // Deregister from the yellow pages
         try {
             DFService.deregister(this);
         }
         catch (FIPAException fe) {
             fe.printStackTrace();
         }
-        // Close the GUI
         myGui.dispose();
-        // Printout a dismissal message
-        System.out.println("Seller-agent "+getAID().getName()+" terminating.");
+        System.out.println("Master-agent "+getAID().getName()+" terminating.");
     }
 
-    /**
-     This is invoked by the GUI when the user adds a new book for sale
-     */
     public void updateCatalogue(final String job) {
         addBehaviour(new OneShotBehaviour() {
             public void action() {
                 catalogue.add(job);
                 try {
+                    String slaveNick = String.valueOf(new Random().nextInt());
+                    String[] jobInfo = new String[]{ job, getName() };
                     AgentController agent =  getContainerController()
-                            .createNewAgent(String.valueOf(new Random().nextInt()), "agents.SlaveAgent", new String[]{job, getName()} );
+                            .createNewAgent(slaveNick, "agents.SlaveAgent", jobInfo );
                     agent.start();
                 } catch (StaleProxyException e) {
                     e.printStackTrace();
@@ -105,7 +92,7 @@ public class MasterAgent extends Agent {
         } );
     }
 
-    private class OfferRequestsServer extends CyclicBehaviour {
+    private class GetResult extends CyclicBehaviour {
         public void action() {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
             ACLMessage msg = myAgent.receive(mt);

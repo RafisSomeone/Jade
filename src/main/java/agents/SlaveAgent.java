@@ -35,11 +35,10 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class SlaveAgent extends Agent {
     private String jobName;
-    private AID[] masterAgents;
     private AID receiver;
 
     protected void setup() {
-        System.out.println("Hallo! Slave "+getAID().getName()+" is ready.");
+        System.out.println("Hello! Slave "+getAID().getName()+" is ready.");
 
         Object[] args = getArguments();
         if (args != null && args.length > 1) {
@@ -49,7 +48,7 @@ public class SlaveAgent extends Agent {
             addBehaviour(new OneShotBehaviour(this) {
                 @Override
                 public void action() {
-                    myAgent.addBehaviour(new RequestPerformer());
+                    myAgent.addBehaviour(new DoJob());
                 }
             } );
         }
@@ -59,24 +58,25 @@ public class SlaveAgent extends Agent {
         System.out.println("Slave-agent "+getAID().getName()+" terminating.");
     }
 
-    public class RequestPerformer extends Behaviour {
+    public class DoJob extends Behaviour {
 
         public void action() {
             try {
+                //Simulate doing job
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
             cfp.addReceiver(receiver);
-            cfp.setContent("done");
-            cfp.setConversationId("book-trade");
+            cfp.setContent("Job " + jobName + " done");
+            cfp.setConversationId("job-conversation");
             cfp.setReplyWith("cfp"+System.currentTimeMillis());
             myAgent.send(cfp);
         }
 
         public boolean done() {
-            System.out.println("Done");
+            System.out.println("Job " + jobName + " done");
            return true;
         }
     }

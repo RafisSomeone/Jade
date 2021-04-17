@@ -31,14 +31,14 @@ import javax.swing.*;
  @author Giovanni Caire - TILAB
  */
 class Gui extends JFrame {
-    private MasterAgent myAgent;
+    private MasterAgent masterAgent;
 
     private JTextField jobField;
 
     Gui(MasterAgent a) {
         super(a.getLocalName());
 
-        myAgent = a;
+        masterAgent = a;
 
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(2, 2));
@@ -52,7 +52,7 @@ class Gui extends JFrame {
             public void actionPerformed(ActionEvent ev) {
                 try {
                     String job = jobField.getText().trim();
-                    myAgent.updateCatalogue(job);
+                    masterAgent.updateCatalogue(job);
                     jobField.setText("");
                 }
                 catch (Exception e) {
@@ -68,7 +68,7 @@ class Gui extends JFrame {
         // the GUI using the button on the upper right corner
         addWindowListener(new	WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                myAgent.doDelete();
+                masterAgent.doDelete();
             }
         } );
 
