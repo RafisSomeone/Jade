@@ -45,7 +45,6 @@ public class anAgent extends Agent {
 
     Random ran = new Random();
     private Meeting meeting = new Meeting();
-    private AID myAID = this.getAID();
     private int step = 0;
     private boolean isDone = false;
 
@@ -65,15 +64,11 @@ public class anAgent extends Agent {
         });
 
     }
-
-
     protected void takeDown() {
         System.out.println(getAID().getName() + " " + type.name() + " terminating.");
     }
 
     public class Ready extends Behaviour {
-
-
         public void action() {
             switch (step) {
                 case 0:
@@ -119,7 +114,6 @@ public class anAgent extends Agent {
         }
     }
 
-
     public class Meeting {
 
         public AID managerAID;
@@ -135,7 +129,6 @@ public class anAgent extends Agent {
             } catch (Exception ignored) {
             }
         }
-
         public void ready(Agent myAgent) {
             ACLMessage readyMessage = new ACLMessage(ACLMessage.CFP);
             readyMessage.addReceiver(managerAID);
@@ -143,7 +136,6 @@ public class anAgent extends Agent {
             readyMessage.setReplyWith("cfp" + System.currentTimeMillis());
             myAgent.send(readyMessage);
         }
-
         public void leave(Agent myAgent) {
             ACLMessage readyMessage = new ACLMessage(ACLMessage.CANCEL);
             readyMessage.addReceiver(managerAID);

@@ -100,7 +100,6 @@ public class MeetingManager extends Agent {
         }
     }
 
-    // Put agent clean-up operations here
     protected void takeDown() {
         // Deregister from the yellow pages
         try {
